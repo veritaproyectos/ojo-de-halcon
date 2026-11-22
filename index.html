@@ -44,6 +44,7 @@ input[type=file]::file-selector-button{border:1px solid var(--gr);background:var
 button.rd{background:var(--erb);border-color:var(--erb);color:#fff}
 .up{text-align:center;font-size:12px;color:var(--mu);margin:0 0 8px}.up b{color:var(--tx)}.up b.st{color:var(--rvb)}
 button.rst{margin-left:auto;background:var(--erb);border-color:var(--erb);color:#fff;letter-spacing:.8px;padding:7px 18px}
+.acc{cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--hd);border:1px solid var(--bd);border-radius:8px;margin:16px 0 10px}.acc:hover{background:#dfe7ef}.acc .mu{font-size:12px;font-weight:400}
 </style></head><body>
 <header><div class="br"><h1>OJO DE HALCÓN</h1><small>Logística Sanse by Vera</small></div><nav><button data-v="tab" onclick="go('tab')">Tablero</button><button data-v="bus" onclick="go('bus')">Buscar</button><button data-v="cor" onclick="go('cor')">Correcciones</button><button data-v="inf" onclick="go('inf')">Informe</button><button data-v="aju" onclick="go('aju')">Ajustes</button></nav><button class="rst" onclick="rst()" title="Borra el inventario cargado y vuelve al inicio">RESET</button></header>
 <div id="ov" class="ov" onclick="if(event.target===this)ovx(false)"><div class="mb" role="dialog" aria-modal="true"><h3 id="ovh" style="margin-top:0"></h3><p id="ovt"></p><div class="bt"><button onclick="ovx(false)">Cancelar</button><button id="ovy" class="dn" onclick="ovx(true)"></button></div></div></div>
@@ -54,7 +55,7 @@ const $=s=>document.querySelector(s),K='halcon_v1',E=s=>String(s==null?'':s).rep
 const hoy=()=>new Date().toLocaleDateString('sv-SE'),dias=f=>f?Math.floor((Date.now()-new Date(f))/864e5):0;
 let S=null;try{S=JSON.parse(localStorage.getItem(K))}catch(e){}
 if(!S){S={locs:{},inv:[],aud:[],unk:[],cfg:{dias:180,user:''}};DEF.forEach(([id,r,c])=>S.locs[id]={r,c,a:1})}
-let LIM=300,FIL=null,V='tab',SEL=null,Q='',OLD=false,LQ='';
+let UBO=false,LIM=300,FIL=null,V='tab',SEL=null,Q='',OLD=false,LQ='';
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){alert('No se pudo guardar en este navegador (almacenamiento lleno).')}};
 const msg=t=>{$('#msg').textContent=t;setTimeout(()=>$('#msg').textContent='',9000)};
 const NM={act:'ubicaciones activas',stk:'con stock',rev:'a revisar',old:'con pedidos antiguos',hoy:'auditadas hoy'};
@@ -181,8 +182,8 @@ function A(){return`<div class="cards"><div class="card"><h4>Inventario base (Ex
 <div class="card"><h4>Parámetros</h4><label>Días para considerar un pedido antiguo <input type="number" min="1" style="width:80px" value="${S.cfg.dias}" onchange="S.cfg.dias=+this.value||180;save()"></label></div>
 <div class="card"><h4>Tamaño del tablero</h4><p class="mu">Añade 1 fila o columna libre por cada clic. Tamaño actual: ${G().r1-G().r0+1} filas × ${G().c1-G().c0+1} columnas.</p><div class="g2"><button onclick="ex('t')">Arriba</button><button onclick="ex('b')">Abajo</button><button onclick="ex('l')">Izquierda</button><button onclick="ex('r')">Derecha</button></div></div>
 <div class="card"><h4>Copia de seguridad</h4><p class="mu">Los datos se guardan en este navegador. Para usarlos en otro ordenador, exporta aquí e importa allí.</p><button onclick="bk()">Exportar copia</button> <input type="file" accept=".json" onchange="rs(this.files[0])"></div></div>
-<h3>Ubicaciones</h3><p class="mu">Escribe uno o varios códigos: se crean en «Otras zonas» del Tablero y desde allí los arrastras a su sitio en el mapa.</p>${S.unk&&S.unk.length?`<div class="warn">${S.unk.length} ubicaciones del inventario no están en el mapa (${E(S.unk.slice(0,8).join(', '))}…) <button onclick="addUnk()">Añadirlas como zonas</button></div>`:''}
-<div class="bar"><input type="text" placeholder="Buscar ubicación" value="${E(LQ)}" oninput="LQ=this.value;AL()"><input id="nl" placeholder="Códigos nuevos separados por espacio (ej. A1873 A1881)" size="46"><button class="pri" onclick="addL()">Crear ubicaciones</button></div><div id="al">${alist()}</div>`}
+<h3 class="acc" role="button" tabindex="0" aria-expanded="${UBO}" onclick="UBO=!UBO;R()" onkeydown="if(event.key=='Enter'){UBO=!UBO;R()}"><span>${UBO?'▾':'▸'}</span> Ubicaciones <span class="mu">(${Object.keys(S.locs).length}) · ${UBO?'pulsa para plegar':'pulsa para desplegar'}</span></h3>${S.unk&&S.unk.length?`<div class="warn">${S.unk.length} ubicaciones del inventario no están en el mapa (${E(S.unk.slice(0,8).join(', '))}…) <button onclick="addUnk()">Añadirlas como zonas</button></div>`:''}
+${UBO?`<p class="mu">Escribe uno o varios códigos: se crean en «Otras zonas» del Tablero y desde allí los arrastras a su sitio en el mapa.</p><div class="bar"><input type="text" placeholder="Buscar ubicación" value="${E(LQ)}" oninput="LQ=this.value;AL()"><input id="nl" placeholder="Códigos nuevos separados por espacio (ej. A1873 A1881)" size="46"><button class="pri" onclick="addL()">Crear ubicaciones</button></div><div id="al">${alist()}</div>`:''}`}
 function bk(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));a.download='halcon_copia_'+hoy()+'.json';a.click()}
 async function rs(f){if(!f)return;try{const d=JSON.parse(await f.text());if(!d.locs)throw 0;S=d;save();msg('Copia restaurada');R()}catch(e){alert('Archivo de copia no válido.')}}
 const iso=v=>v instanceof Date?new Date(v.getTime()+432e5).toISOString().slice(0,10):String(v||'').slice(0,10);
