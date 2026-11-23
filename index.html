@@ -1,229 +1,229 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Albaranes CC / CC2</title>
-<style>
-:root{color-scheme:light;--bg:#fff;--card:#fff;--ink:#000;--mute:#333;--line:#cfd6d2;--acc:#1b7a3d;--accink:#fff}
-h1,h2,th{color:var(--acc)}
-.by{margin:0 0 10px;font-size:.8rem;color:var(--acc);text-align:left}
-summary{font-size:1rem;font-weight:700;color:var(--acc);cursor:pointer}
-summary .hint{font-weight:400;color:var(--mute);font-size:.85rem}
-details[open] summary{margin-bottom:12px}
-input[type=checkbox],input[type=radio]{accent-color:var(--acc);width:16px;height:16px}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,sans-serif}
-main{max-width:860px;margin:0 auto;padding:28px 18px 60px}
-h1{font-size:1.5rem;margin:0 0 4px}
-p.sub{color:var(--mute);margin:0 0 22px}
-section{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px;margin-bottom:16px}
-h2{font-size:1rem;margin:0 0 10px}
-#drop{border:2px dashed var(--line);border-radius:8px;padding:30px;text-align:center;cursor:pointer}
-#drop.over,#drop:focus-visible{border-color:var(--acc);outline:none}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chips label{border:1px solid var(--line);border-radius:6px;padding:5px 10px;cursor:pointer;display:flex;gap:6px;align-items:center}
-button{font:inherit;border:0;border-radius:6px;padding:10px 18px;background:var(--acc);color:var(--accink);cursor:pointer;font-weight:600}
-button.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}
-button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
-.row{display:flex;gap:10px;flex-wrap:wrap}
-.hide{display:none}
-#msg{color:var(--mute)}
-#msg.err{color:#b3261e}
-.wrap{overflow-x:auto}
-table{border-collapse:collapse;width:100%;font-size:.85rem}
-th,td{border-bottom:1px solid var(--line);padding:4px 8px;text-align:left;white-space:nowrap}
-</style>
-</head>
-<body>
-<main>
-<h1>CONVERSOR PEDIDOS FLETES</h1>
-<p class="by">Logistica Sanse by Vera</p>
-<h1>Albaranes CC / CC2</h1>
-<p class="sub">Sube el Excel original y descarga el PDF listo para imprimir. El archivo se procesa en tu navegador y no se envía a ningún sitio.</p>
-
-<section>
-<h2>1. Archivo</h2>
-<div id="drop" tabindex="0" role="button" aria-label="Elegir archivo Excel">Arrastra aquí el Excel o haz clic para elegirlo</div>
-<input id="file" type="file" accept=".xlsx,.xls" class="hide">
-<p id="msg"></p>
-</section>
-
-<section id="plat" class="hide">
-<h2>2. Plataforma</h2>
-<div class="chips">
-<label><input type="radio" name="p" value="TORIJA">TORIJA</label>
-<label><input type="radio" name="p" value="VALENCIA">VALENCIA</label>
-<label><input type="radio" name="p" value="MECO">MECO</label>
-<label><input type="radio" name="p" value="GETAFE">GETAFE</label>
-</div>
-</section>
-
-<section id="opts" class="hide">
-<details>
-<summary>3. Qué conservar <span class="hint">(pulsa para ver o cambiar)</span></summary>
-<p class="sub" style="margin-bottom:8px">Flujos</p>
-<div class="chips" id="flows"></div>
-<p class="sub" style="margin:14px 0 8px">Columnas (PYXIS y la columna UBICACIÓN se colocan solas junto a PEDIDO)</p>
-<div class="chips" id="cols"></div>
-</details>
-</section>
-
-<section id="out" class="hide">
-<h2>4. Resultado</h2>
-<div class="row" style="margin-bottom:12px">
-<button id="pdf">Descargar PDF</button>
-<button id="xls" class="alt">Descargar Excel</button>
-</div>
-<div class="wrap"><table id="prev"></table></div>
-</section>
-</main>
-
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ojo de Halcón · Rack pedidos cliente</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<style>
+:root{--bg:#fff;--cd:#fff;--tx:#111;--mu:#3a3a3a;--bd:#b9c2cf;--ac:#17803f;--ok:#b4e8c8;--okb:#1f8a52;--rv:#ffe08a;--rvb:#b07d00;--er:#f6b0b0;--erb:#b3261e;--au:#b8d5fb;--aub:#2a64b8;--hd:#e9eef4;--gr:#17803f}
+*{box-sizing:border-box}body{margin:0;font:14px/1.45 system-ui,"Segoe UI",sans-serif;background:var(--bg);color:var(--tx)}
+header{box-shadow:0 1px 4px rgba(0,0,0,.08);display:flex;gap:20px;align-items:center;padding:10px 18px;background:var(--cd);border-bottom:1px solid var(--bd);flex-wrap:wrap}
+h1{font-size:20px;margin:0;letter-spacing:1.5px;text-transform:uppercase;color:var(--gr)}h3,h4{margin:14px 0 8px}
+nav{display:flex;gap:4px}nav button{border:0;background:none;padding:8px 14px;border-radius:6px;font:inherit;font-size:13px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--gr);cursor:pointer}nav button:hover{background:#e6f4ec;filter:none}nav button.on{background:var(--gr);color:#fff;box-shadow:none}
+button,select,input{font:inherit;color:var(--tx)}button{border:1px solid var(--bd);background:var(--cd);padding:6px 12px;border-radius:6px;cursor:pointer}button.pri{background:var(--ac);color:#fff;border-color:var(--ac)}
+input,select{border:1px solid var(--bd);background:var(--cd);padding:6px 8px;border-radius:6px}:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
+#msg{padding:0 18px;color:var(--ac);font-weight:600}main{padding:14px 18px}.mu{color:var(--mu)}
+.k{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:12px}.kpi{display:flex;flex-direction:column;align-items:center;text-align:center;line-height:1.15;min-width:138px;padding:9px 18px 9px 14px;background:var(--cd);border:1px solid var(--bd);border-left:6px solid var(--kc);border-radius:12px;box-shadow:0 1px 4px rgba(20,30,50,.08);transition:box-shadow .15s,transform .15s}.kpi .kn{font-size:28px;font-weight:700;color:var(--kc)}.kpi .kl{font-size:12px;color:var(--mu);margin-top:3px}.k0{--kc:#0e5a2d}.k1{--kc:var(--okb)}.k2{--kc:var(--rvb)}.k3{--kc:var(--aub)}.k4{--kc:var(--erb)}
+.w{display:flex;gap:14px;align-items:flex-start}.w>div{flex:1;min-width:0;overflow:auto}
+.g{display:grid;grid-template-columns:repeat(22,minmax(48px,1fr));gap:3px;min-width:1100px}
+.c{border:1.5px solid var(--bd);border-radius:4px;padding:3px 1px;font-size:11px;text-align:center;cursor:pointer;background:var(--cd);min-height:36px}.c small{display:block;color:var(--mu)}
+.c.ok{background:var(--ok);border-color:var(--okb)}.c.rv{background:var(--rv);border-color:var(--rvb)}.c.er{background:var(--er);border-color:var(--erb)}.c.au{background:var(--au);border-color:var(--aub)}
+.c.in{opacity:.4;background:repeating-linear-gradient(45deg,transparent 0 5px,var(--bd) 5px 6px)}.c.sel{outline:3px solid var(--ac)}
+.e{min-height:36px;border-radius:4px}
+.zn{min-height:52px;padding:6px;border:2px dashed var(--bd);border-radius:8px;align-items:center}.dg .zn{border-color:var(--ac)}.dg .e{opacity:.55;border:1px dashed var(--ac)}.c[draggable=true]{cursor:grab}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:9;padding:16px}.ov.on{display:flex}.mb{background:#fff;border-radius:10px;padding:20px 22px;max-width:430px;box-shadow:0 8px 30px rgba(0,0,0,.3)}.bt{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}button.dn{background:var(--erb);color:#fff;border-color:var(--erb)}button.dl{color:var(--erb);border-color:var(--erb);width:100%;margin-top:8px}
+.kc{cursor:pointer}.kc:hover{box-shadow:0 4px 12px rgba(20,30,50,.18);transform:translateY(-1px)}.kpi.on{background:color-mix(in srgb,var(--kc) 10%,#fff);box-shadow:0 0 0 2px var(--kc)}.ht{font-size:12px;margin:2px 0 4px}.ht div{padding:1px 0}aside textarea{font:inherit;border:1px solid var(--bd);border-radius:6px;padding:6px 8px;margin:3px 0;resize:vertical}
+.info{background:var(--au);border:1px solid var(--aub);padding:8px 12px;border-radius:6px;margin-bottom:10px}.info div{padding:1px 0}
+@media print{header,#msg,.bar,.noprint,#ov{display:none!important}body,main{background:#fff;padding:0}table{font-size:10px}th{position:static}tr{page-break-inside:avoid}a{color:#000;text-decoration:none}.pt{margin:0 0 8px}}
+.z{display:flex;gap:3px;flex-wrap:wrap;margin-top:10px}.z .c{width:64px}
+.tb{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:4px 0 12px}.sb{display:flex;gap:6px;align-items:center}.sm{padding:5px 12px;font-size:13px;border-radius:999px}.sb input.sm{width:300px;padding:7px 14px;font-size:14px}.sb button.sm{padding:7px 16px;font-size:14px}.lg{display:flex;gap:8px;font-size:12px;color:var(--mu);flex-wrap:wrap}.lg span{display:inline-flex;align-items:center;gap:6px;padding:3px 11px;background:var(--cd);border:1px solid var(--bd);border-radius:999px}.lg i{display:inline-block;width:12px;height:12px;border-radius:4px;border:1.5px solid var(--bd)}
+aside{width:320px;flex:none;background:var(--cd);border:1px solid var(--bd);border-radius:8px;padding:12px 14px;position:sticky;top:8px}aside h3{margin:0}aside input,aside select{width:100%;margin:3px 0}
+.x{float:right;padding:0 8px}.lst{max-height:210px;overflow:auto;border:1px solid var(--bd);border-radius:6px;padding:4px 8px}.lst div{padding:4px 0;border-bottom:1px solid var(--bd);font-size:12px}
+table{border-collapse:collapse;width:100%;background:var(--cd);border:1px solid var(--bd)}th,td{padding:5px 8px;border-bottom:1px solid var(--bd);text-align:left}th{background:var(--hd);position:sticky;top:0}
+.bar{display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap}.bar input[type=text],#q{flex:1;min-width:220px}
+.cards{display:flex;gap:12px;flex-wrap:wrap}.card{background:var(--cd);border:1px solid var(--bd);border-radius:8px;padding:10px 14px;min-width:250px;flex:1}.card h4{margin:0 0 6px}.kv{display:flex;justify-content:space-between;padding:2px 0}
+.warn{background:var(--rv);border:1px solid var(--rvb);padding:8px 12px;border-radius:6px;margin-bottom:10px}.empty{padding:30px;text-align:center;border:2px dashed var(--bd);border-radius:10px}
+@media(max-width:900px){.w{flex-direction:column}aside{width:100%;position:static}}
+.card{min-width:230px;max-width:100%;overflow:hidden}.card h4,h3{color:var(--gr)}
+button{color:#fff;background:var(--gr);border:1px solid var(--gr);font-weight:600}button:hover{filter:brightness(.9)}button.dl{background:var(--gr);color:#fff;border-color:var(--gr)}
+input[type=checkbox]{accent-color:var(--gr);width:16px;height:16px;vertical-align:-3px}
+input[type=file]{display:block;width:100%;max-width:100%;margin-top:8px;font-size:12px}
+input[type=file]::file-selector-button{border:1px solid var(--gr);background:var(--gr);color:#fff;font-weight:600;padding:5px 12px;border-radius:6px;margin-right:8px;cursor:pointer}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:6px}.g2 button{width:100%}
+::placeholder{color:#8a8f98}th{color:var(--gr)}a{color:var(--gr)}
+@media print{:root{--tx:#000;--mu:#333}}
+.br{display:flex;flex-direction:column;align-items:center;line-height:1.1}.br small{font-size:11px;font-weight:600;color:var(--gr);margin-top:3px;letter-spacing:.8px;text-align:center}
+button.rd{background:var(--erb);border-color:var(--erb);color:#fff}
+.up{text-align:center;font-size:12px;color:var(--mu);margin:0 0 8px}.up b{color:var(--tx)}.up b.st{color:var(--rvb)}
+button.rst{margin-left:auto;background:var(--erb);border-color:var(--erb);color:#fff;letter-spacing:.8px;padding:7px 18px}
+.acc{cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--hd);border:1px solid var(--bd);border-radius:8px;margin:16px 0 10px}.acc:hover{background:#dfe7ef}.acc .mu{font-size:12px;font-weight:400}
+.pg{height:8px;background:var(--bd);border-radius:6px;margin:6px 0;overflow:hidden}.pg i{display:block;height:100%;background:var(--gr)}.up b.bad{color:var(--erb)}
+.fm{display:grid;grid-template-columns:120px 1fr;gap:8px 10px;align-items:center}.fm input,.fm select{width:100%}
+.up button.sm{padding:1px 10px;font-size:11px;font-weight:600;margin-left:8px}
+td button[aria-label]{width:26px;height:26px;padding:0;font-size:13px;line-height:1;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;vertical-align:middle;margin:0 1px}
+.pgn{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0 10px}.pgn input{width:64px}.pgn select{padding:4px 6px}.pgn button:disabled{opacity:.4;cursor:default;filter:none}
+</style></head><body>
+<header><div class="br"><h1>OJO DE HALCÓN</h1><small>Logística Sanse by Vera</small></div><nav><button data-v="tab" onclick="go('tab')">Tablero</button><button data-v="bus" onclick="go('bus')">Buscar</button><button data-v="cor" onclick="go('cor')">Correcciones</button><button data-v="inf" onclick="go('inf')">Informe</button><button data-v="aju" onclick="go('aju')">Ajustes</button></nav><button class="rst" onclick="rst()" title="Borra el inventario cargado y vuelve al inicio">RESET</button></header>
+<div id="ov" class="ov" onclick="if(event.target===this)ovx(false)"><div class="mb" role="dialog" aria-modal="true"><h3 id="ovh" style="margin-top:0"></h3><p id="ovt"></p><div class="bt"><button onclick="ovx(false)">Cancelar</button><button id="ovy" class="dn" onclick="ovx(true)"></button></div></div></div>
+<div id="edm" class="ov" onclick="if(event.target===this)edx()"><div class="mb" role="dialog" aria-modal="true" style="width:min(480px,94vw)"><h3 style="margin-top:0">Editar registro</h3><div class="fm"><label for="ef">Fecha</label><input id="ef" type="date"><label for="ec">Colaborador</label><input id="ec"><label for="en">Errores (0-99)</label><input id="en" type="number" min="0" max="99"><label for="em">Motivo</label><select id="em"></select><label for="eu">Ubicación</label><input id="eu"><label for="ep">Pedido(s)</label><input id="ep"><label for="eo">Observaciones</label><input id="eo"></div><div class="bt"><button onclick="edx()">Cancelar</button><button class="pri" onclick="edok()">Guardar cambios</button></div></div></div>
+<div id="msg"></div><main id="main"></main>
 <script>
-// Columnas marcadas por defecto (cambia esta lista si quieres otro valor inicial)
-const DEFAULT_COLS=["ALMACEN","FLETE","FECHA","CIRCUITO","PEDIDO","FLUJO","SECCION","REF_LM","DESIG","EAN","CANTIDAD","PYXIS","CONTE_AGRUP","TRANSPORTE"];
-const DEFAULT_FLOWS=["CC","CC2"];
-// Número de almacén -> plataforma (se marca sola al subir el Excel).
-// Para añadir Getafe: "NÚMERO":"GETAFE"
-const PLATAFORMAS={"431":"TORIJA","439":"VALENCIA","448":"MECO"};
-let avisos=[];
-const LOC="UBICACIÓN";
-// Columnas que se imprimen centradas y en negrita en el PDF
-const STRONG=["FLETE","CANTIDAD","PYXIS"];
-let headers=[],rows=[],meta={},fileName="albaran";
-const $=id=>document.getElementById(id);
-const norm=s=>String(s??"").trim().toUpperCase();
-const isPyxis=h=>/^(PYXIS|PIXYS)$/.test(norm(h));
-
-function say(t,err){const m=$("msg");m.textContent=t;m.className=err?"err":""}
-function fmt(v){
-  if(v instanceof Date){const p=n=>String(n).padStart(2,"0");return p(v.getDate())+"/"+p(v.getMonth()+1)+"/"+v.getFullYear()}
-  return v==null?"":String(v);
-}
-
-$("drop").onclick=()=>$("file").click();
-$("drop").onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();$("file").click()}};
-$("drop").ondragover=e=>{e.preventDefault();$("drop").classList.add("over")};
-$("drop").ondragleave=()=>$("drop").classList.remove("over");
-$("drop").ondrop=e=>{e.preventDefault();$("drop").classList.remove("over");load(e.dataTransfer.files[0])};
-$("file").onchange=e=>load(e.target.files[0]);
-
-function load(f){
-  if(!f)return;
-  fileName=f.name.replace(/\.[^.]+$/,"");
-  const r=new FileReader();
-  r.onload=e=>{
-    try{
-      const wb=XLSX.read(e.target.result,{type:"array",cellDates:true});
-      const data=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,raw:true,defval:""});
-      headers=data[0].map(h=>String(h).trim());
-      if(!headers.some(h=>norm(h)==="FLUJO"))throw new Error("No encuentro la columna FLUJO. ¿Es el archivo correcto?");
-      rows=data.slice(1).filter(r=>r.some(c=>c!==""));
-      setup();
-    }catch(err){say(err.message,true)}
-  };
-  r.readAsArrayBuffer(f);
-}
-
-function setup(){
-  const fi=headers.findIndex(h=>norm(h)==="FLUJO");
-  const flows=[...new Set(rows.map(r=>norm(r[fi])))].filter(Boolean);
-  $("flows").innerHTML=flows.map(x=>`<label><input type="checkbox" name="f" value="${x}" ${DEFAULT_FLOWS.includes(x)?"checked":""}>${x}</label>`).join("");
-  $("cols").innerHTML=headers.map((h,i)=>`<label><input type="checkbox" name="c" value="${i}" ${DEFAULT_COLS.includes(norm(h))||isPyxis(h)?"checked":""}>${h}</label>`).join("");
-  document.querySelectorAll("#opts input").forEach(i=>i.onchange=render);
-  $("plat").classList.remove("hide");$("opts").classList.remove("hide");$("out").classList.remove("hide");
-  const g=n=>{const k=headers.findIndex(h=>norm(h)===n);return k<0?"":fmt(rows[0][k])};
-  meta={albaran:g("ALMACEN")+"-"+g("FLETE"),tienda:g("TIENDA"),fecha:g("FECHA")};
-  avisos=[];
-  const falta=DEFAULT_COLS.filter(c=>!headers.some(h=>norm(h)===c));
-  if(falta.length)avisos.push("Faltan columnas habituales: "+falta.join(", ")+".");
-  const fk=headers.findIndex(h=>norm(h)==="FLETE");
-  if(fk>=0&&new Set(rows.map(r=>r[fk])).size>1)avisos.push("El archivo contiene más de un albarán.");
-  const alm=g("ALMACEN"),pl=PLATAFORMAS[alm];
-  document.querySelectorAll("input[name=p]").forEach(i=>i.checked=(i.value===pl));
-  if(!pl)avisos.push("No reconozco el almacén «"+alm+"»: elige la plataforma a mano.");
-  render();
-}
-
-function result(){
-  const fi=headers.findIndex(h=>norm(h)==="FLUJO");
-  const fl=[...document.querySelectorAll("input[name=f]:checked")].map(i=>i.value);
-  let idx=[...document.querySelectorAll("input[name=c]:checked")].map(i=>+i.value).sort((a,b)=>a-b);
-  const pe=idx.find(i=>norm(headers[i])==="PEDIDO"),py=idx.find(i=>isPyxis(headers[i]));
-  // PYXIS va pegada a PEDIDO y UBICACIÓN pegada a PYXIS
-  if(pe!==undefined&&py!==undefined){idx=idx.filter(i=>i!==py);idx.splice(idx.indexOf(pe)+1,0,py)}
-  const anchor=py!==undefined?py:pe;
-  const head=[],cols=[];
-  idx.forEach(i=>{head.push(headers[i]);cols.push(i);if(i===anchor){head.push(LOC);cols.push(-1)}});
-  if(!head.includes(LOC)){head.push(LOC);cols.push(-1)} // si PEDIDO no está marcado, va al final
-  const body=rows.filter(r=>fl.includes(norm(r[fi]))).map(r=>cols.map(i=>i<0?"":fmt(r[i])));
-  return{head,body,locIdx:head.indexOf(LOC)};
-}
-
-function render(){
-  const {head,body}=result();
-  $("prev").innerHTML="<tr>"+head.map(h=>`<th>${h}</th>`).join("")+"</tr>"+
-    body.slice(0,50).map(r=>"<tr>"+r.map(c=>`<td>${c}</td>`).join("")+"</tr>").join("");
-  const w=[...avisos];
-  if(!body.length)w.unshift("No hay líneas con los flujos elegidos. ¿Es el Excel correcto?");
-  const base=body.length+" líneas en el resultado"+(body.length>50?" (vista previa de las 50 primeras)":"")+".";
-  say(w.length?base+" ⚠ "+w.join(" "):base,w.length>0);
-}
-
-$("pdf").onclick=()=>{
-  const {head,body,locIdx}=result();
-  if(!body.length){say("No hay líneas con los flujos elegidos.",true);return}
-  const p=document.querySelector("input[name=p]:checked");
-  if(!p){alert("Elige la plataforma antes de descargar el PDF.");return}
-  const doc=new jspdf.jsPDF({orientation:"landscape",unit:"mm",format:"a4"});
-  doc.setFontSize(13);doc.setTextColor(27,122,61);doc.text("Albarán "+meta.albaran+"  ·  "+meta.tienda+"  ·  "+meta.fecha+"  ·  Plataforma: "+p.value,10,12);
-  // Anchos a medida: cada columna cabe en una línea; DESIG se reparte el resto y puede saltar de línea
-  const W=277,pad=1.8,di=head.findIndex(h=>norm(h)==="DESIG");
-  let fs=7.5,cw,rest;
-  for(;fs>=5;fs-=.5){
-    doc.setFontSize(fs);
-    cw=head.map((h,c)=>{
-      doc.setFont("helvetica","bold");let m=doc.getTextWidth(h);
-      doc.setFont("helvetica",STRONG.includes(norm(h))?"bold":"normal");
-      body.forEach(r=>{const w=doc.getTextWidth(r[c]);if(w>m)m=w});
-      return m+2*pad+1;
-    });
-    rest=W-cw.reduce((s,w,i)=>(i===di||i===locIdx)?s:s+w,0);
-    if(rest>=80)break;
-  }
-  const styles={};
-  const ub=Math.min(40,Math.max(32,rest*.4));
-  head.forEach((h,i)=>{
-    if(i===locIdx)styles[i]={cellWidth:di>=0?ub:rest};
-    else if(i===di)styles[i]={cellWidth:rest-(locIdx>=0?ub:0)};
-    else styles[i]={cellWidth:cw[i]};
-    if(STRONG.includes(norm(h)))Object.assign(styles[i],{halign:"center",fontStyle:"bold"});
-  });
-  doc.autoTable({head:[head],body,startY:16,margin:{left:10,right:10,bottom:12},
-    styles:{fontSize:fs,cellPadding:pad,lineColor:[150,150,150],lineWidth:.15,textColor:[0,0,0],fillColor:[255,255,255],valign:"middle"},
-    headStyles:{fillColor:[255,255,255],textColor:[27,122,61],fontStyle:"bold"},
-    columnStyles:styles,theme:"grid"});
-  let y=doc.lastAutoTable.finalY+6;
-  if(y>198){doc.addPage();y=14}
-  doc.setFont("helvetica","bold");doc.setFontSize(10);doc.setTextColor(0,0,0);
-  doc.text("Total líneas: "+body.length,10,y);
-  const n=doc.getNumberOfPages();
-  doc.setFont("helvetica","normal");doc.setFontSize(8);
-  for(let i=1;i<=n;i++){doc.setPage(i);doc.text("Página "+i+" de "+n,287,205,{align:"right"})}
-  doc.save(fileName+"_CC.pdf");
-};
-
-$("xls").onclick=()=>{
-  const {head,body}=result();
-  if(!body.length){say("No hay líneas con los flujos elegidos.",true);return}
-  const ws=XLSX.utils.aoa_to_sheet([head,...body]);
-  ws["!cols"]=head.map((h,i)=>({wch:Math.min(40,Math.max(String(h).length,...body.slice(0,200).map(r=>String(r[i]).length))+2)}));
-  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"CC y CC2");
-  XLSX.writeFile(wb,fileName+"_CC.xlsx");
-};
-</script>
-</body>
-</html>
+const DEF=[["A0831",0,0],["A0731",0,1],["A0732",0,2],["A0733",0,3],["A0631",0,4],["A0632",0,5],["A0633",0,6],["A0531",0,7],["A0532",0,8],["A0533",0,9],["A0451",0,10],["A0452",0,11],["A0453",0,12],["A0351",0,13],["A0352",0,14],["A0353",0,15],["A0251",0,16],["A0252",0,17],["A0253",0,18],["A0151",0,19],["A0152",0,20],["A0153",0,21],["A0821",1,0],["A0721",1,1],["A0722",1,2],["A0723",1,3],["A0621",1,4],["A0622",1,5],["A0623",1,6],["A0521",1,7],["A0522",1,8],["A0523",1,9],["A0441",1,10],["A0442",1,11],["A0443",1,12],["A0341",1,13],["A0342",1,14],["A0343",1,15],["A0241",1,16],["A0242",1,17],["A0243",1,18],["A0141",1,19],["A0142",1,20],["A0143",1,21],["A0811",2,0],["A0711",2,1],["A0712",2,2],["A0713",2,3],["A0611",2,4],["A0612",2,5],["A0613",2,6],["A0511",2,7],["A0512",2,8],["A0513",2,9],["A0431",2,10],["A0432",2,11],["A0433",2,12],["A0331",2,13],["A0332",2,14],["A0333",2,15],["A0231",2,16],["A0232",2,17],["A0233",2,18],["A0131",2,19],["A0132",2,20],["A0133",2,21],["A0421",3,10],["A0422",3,11],["A0423",3,12],["A0321",3,13],["A0322",3,14],["A0323",3,15],["A0221",3,16],["A0222",3,17],["A0223",3,18],["A0121",3,19],["A0122",3,20],["A0123",3,21],["A0801",4,0],["A0701",4,1],["A0702",4,2],["A0703",4,3],["A0601",4,4],["A0602",4,5],["A0603",4,6],["A0501",4,7],["A0502",4,8],["A0503",4,9],["A0411",4,10],["A0412",4,11],["A0413",4,12],["A0311",4,13],["A0312",4,14],["A0313",4,15],["A0211",4,16],["A0212",4,17],["A0213",4,18],["A0401",5,10],["A0402",5,11],["A0403",5,12],["19121",6,0],["A1871",6,3],["A1872",6,4],["19111",7,0],["A1861",7,3],["A1862",7,4],["A1761",7,5],["A1762",7,6],["A1661",7,7],["A1662",7,8],["A1561",7,9],["A1562",7,10],["A1461",7,11],["A1462",7,12],["19101",8,0],["A1851",8,3],["A1751",8,5],["A1752",8,6],["A1651",8,7],["A1652",8,8],["A1551",8,9],["A1552",8,10],["A1451",8,11],["A1452",8,12],["A1991",9,0],["A1841",9,3],["A1741",9,5],["A1742",9,6],["A1641",9,7],["A1642",9,8],["A1541",9,9],["A1542",9,10],["A1441",9,11],["A1442",9,12],["A1331",9,13],["A1332",9,14],["A1221",9,15],["A1222",9,17],["A1121",9,18],["A1122",9,19],["A1021",9,20],["A0921",9,21],["A1981",10,0],["A1831",10,3],["A1731",10,5],["A1732",10,6],["A1631",10,7],["A1632",10,8],["A1531",10,9],["A1532",10,10],["A1431",10,11],["A1432",10,12],["A1321",10,13],["A1322",10,14],["A1211",10,15],["A1212",10,17],["A1111",10,18],["A1112",10,19],["A1011",10,20],["A1971",11,0],["A1821",11,3],["A1721",11,5],["A1621",11,7],["A1521",11,9],["A1421",11,11],["A1311",11,13],["A1312",11,14],["PICK3",11,15],["A1961",12,0],["A1811",12,3],["A1711",12,5],["A1611",12,7],["A1511",12,9],["A1411",12,11],["PICK2",12,15],["A1951",13,0],["A1801",13,3],["A1701",13,5],["A1601",13,7],["A1501",13,9],["A1401",13,11],["A1301",13,13],["PICK1",13,15],["A1101",13,18],["A1001",13,20],["A0901",13,21],["A1941",14,0],["A1931",15,0],["A2643",15,4],["A2341",15,5],["A2342",15,6],["A2343",15,7],["A2231",15,8],["A2232",15,9],["A2233",15,10],["A2121",15,11],["A2122",15,12],["A2123",15,13],["A2031",15,14],["A2032",15,15],["A2033",15,16],["A1921",16,0],["A2633",16,4],["A2331",16,5],["A2332",16,6],["A2333",16,7],["A2221",16,8],["A2222",16,9],["A2223",16,10],["A2111",16,11],["A2112",16,12],["A2113",16,13],["A2021",16,14],["A2022",16,15],["A2023",16,16],["A1911",17,0],["A2623",17,4],["A2321",17,5],["A2322",17,6],["A2323",17,7],["A2211",17,8],["A2212",17,9],["A2213",17,10],["A2011",17,14],["A2012",17,15],["A2013",17,16],["A1901",18,0],["A2613",18,4],["A2311",18,5],["A2312",18,6],["A2313",18,7],["A2201",18,8],["A2202",18,9],["A2203",18,10],["A2101",18,11],["A2102",18,12],["A2103",18,13],["A2001",18,14],["A2002",18,15],["A2003",18,16],["A2603",19,4],["A2301",19,5],["A2302",19,6],["A2303",19,7],["A3221",21,0],["A3222",21,1],["A3041",21,5],["A3042",21,6],["A3043",21,7],["A2941",21,8],["A2942",21,9],["A2943",21,10],["A2841",21,11],["A2842",21,12],["A2843",21,13],["A2741",21,14],["A2742",21,15],["A2743",21,16],["A2641",21,17],["A2642",21,18],["A3211",22,0],["A3212",22,1],["A3131",22,3],["A3132",22,4],["A3031",22,5],["A3032",22,6],["A3033",22,7],["A2931",22,8],["A2932",22,9],["A2933",22,10],["A2831",22,11],["A2832",22,12],["A2833",22,13],["A2731",22,14],["A2732",22,15],["A2733",22,16],["A2631",22,17],["A2632",22,18],["A3121",23,3],["A3122",23,4],["A3021",23,5],["A3022",23,6],["A3023",23,7],["A2921",23,8],["A2922",23,9],["A2923",23,10],["A2821",23,11],["A2822",23,12],["A2823",23,13],["A2721",23,14],["A2722",23,15],["A2723",23,16],["A2621",23,17],["A2622",23,18],["A3200",24,0],["A3111",24,3],["A3112",24,4],["A3011",24,5],["A3012",24,6],["A3013",24,7],["A2911",24,8],["A2912",24,9],["A2913",24,10],["A2811",24,11],["A2812",24,12],["A2813",24,13],["A2711",24,14],["A2712",24,15],["A2713",24,16],["A2611",24,17],["A2612",24,18],["A3101",25,3],["A3102",25,4],["A3001",25,5],["A3002",25,6],["A3003",25,7],["A2901",25,8],["A2902",25,9],["A2903",25,10],["A2801",25,11],["A2802",25,12],["A2803",25,13],["A2701",25,14],["A2702",25,15],["A2703",25,16],["A2601",25,17],["A2602",25,18]];
+const $=s=>document.querySelector(s),K='halcon_v1',E=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const hoy=()=>new Date().toLocaleDateString('sv-SE'),dias=f=>f?Math.floor((Date.now()-new Date(f))/864e5):0;
+let S=null;try{S=JSON.parse(localStorage.getItem(K))}catch(e){}
+if(!S){S={locs:{},inv:[],aud:[],unk:[],cfg:{dias:180,user:''}};DEF.forEach(([id,r,c])=>S.locs[id]={r,c,a:1})}
+let PG=0,PS=50,GD=false,EDI=null,UBO=false,FIL=null,V='tab',SEL=null,Q='',OLD=false,LQ='';
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){alert('No se pudo guardar en este navegador (almacenamiento lleno).')}};
+const msg=t=>{$('#msg').textContent=t;setTimeout(()=>$('#msg').textContent='',9000)};
+const COR='CORRECCION REALIZADA';
+const NM={act:'ubicaciones activas',stk:'con stock',rev:'a revisar',old:'con pedidos antiguos',hoy:'auditadas hoy'};
+function mt(id,ix){const l=S.locs[id];switch(FIL){case'act':return!!l.a;case'stk':return!!(l.a&&ix[id]);case'rev':return!!(l.a&&!ix[id]);case'old':return(ix[id]||[]).some(r=>dias(r.f)>S.cfg.dias);case'hoy':return S.aud.some(x=>x.u===id&&x.f===hoy()&&x.m!==COR);default:return true}}
+const sf=f=>{FIL=FIL===f?null:f;SEL=null;GD=false;R()};
+function idx(){const m={};S.inv.forEach(r=>(m[r.d]=m[r.d]||[]).push(r));return m}
+function st(id,ix){const l=S.locs[id];if(!l.a)return'in';const a=S.aud.filter(x=>x.u===id&&x.f===hoy()&&x.m!==COR).pop();if(a)return a.m==='OK'?'au':'er';return ix[id]?'ok':'rv'}
+const chip=(id,ix)=>{const l=S.locs[id],dr=l.r!=null?` ondragover="event.preventDefault()" ondrop="dp(event,${l.r},${l.c})"`:'';return`<div class="c ${st(id,ix)}${SEL===id?' sel':''}" draggable="true" ondragstart="ds(event,'${id}')" ondragend="document.body.classList.remove('dg')"${dr} onclick="sel('${id}')" title="${id} (arrástrala para moverla)">${id}<small>${(ix[id]||[]).length||'·'}</small></div>`};
+const go=v=>{V=v;R()},sel=id=>{SEL=id;R()},goto=id=>{V='tab';SEL=S.locs[id]?id:null;R()};
+function R(){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===V));$('#main').innerHTML=({tab:T,bus:B,cor:C,inf:I,aju:A})[V]();const pn=CR().filter(x=>!x.ok).length;$('nav [data-v="cor"]').textContent='Correcciones'+(pn?' ('+pn+')':'');if(V==='tab'&&SEL&&$('#ah'))hint();if(GD&&V==='tab'){const e=document.querySelector('.c.sel');if(e&&e.scrollIntoView)e.scrollIntoView({block:'center',inline:'center'})}}
+function bkTxt(){const b=S.cfg.bk,n=b?dias(new Date(b).toISOString()):null,cl=!b?'bad':n>7?'st':'',tx=!b?'nunca':n<1?'hoy':'hace '+n+' día'+(n>1?'s':'');
+return`<br>Última copia de seguridad: <b class="${cl}">${tx}</b>${cl?' · conviene hacer una':''} <button class="sm" onclick="bk()">Hacer copia ahora</button>`}
+function T(){const ix=idx(),L=Object.entries(S.locs),cell={};L.forEach(([id,l])=>{if(l.r!=null)cell[l.r+'_'+l.c]=id});
+const QS=Q?qloc():null,vis=id=>(!QS||QS.has(id))&&(!FIL||mt(id,ix));const G0=G(),nc=G0.c1-G0.c0+1;let g='';for(let r=G0.r0;r<=G0.r1;r++)for(let c=G0.c0;c<=G0.c1;c++){const id=cell[r+'_'+c];g+=id?(vis(id)?chip(id,ix):'<div></div>'):(FIL||Q)?'<div></div>':`<div class="e" ondragover="event.preventDefault()" ondrop="dp(event,${r},${c})"></div>`}
+const kp=(f,n,l,c)=>`<div class="kpi ${c}${f?' kc':''}${FIL===f&&f?' on':''}"${f?` role="button" tabindex="0" onclick="sf('${f}')" onkeydown="if(event.key=='Enter')sf('${f}')" title="Pulsa para ver solo estas ubicaciones"`:''}><span class="kn">${n}</span><span class="kl">${l}</span></div>`;
+const act=L.filter(([,l])=>l.a),rev=act.filter(([id])=>!ix[id]).length,hh=S.aud.filter(x=>x.f===hoy()&&x.m!==COR).length;
+const P=new Set(S.inv.map(r=>r.p)).size,old=new Set(S.inv.filter(r=>dias(r.f)>S.cfg.dias).map(r=>r.p)).size;
+const zon=L.filter(([id,l])=>l.r==null&&vis(id)).sort(([a],[b])=>a.localeCompare(b)).map(([id])=>chip(id,ix)).join('');
+if(!S.inv.length)return`<div class="empty"><h3>Aún no hay inventario</h3><p class="mu">Adjunta el Excel base para empezar.</p><input type="file" accept=".xlsx,.xls,.csv" onchange="imp(this.files[0])"></div>`;
+return`<div class="up">Inventario cargado el <b>${E(S.invDate||'fecha desconocida')}</b> · ${S.inv.length} líneas${S.invTs?(dias(new Date(S.invTs).toISOString())>=1?` · <b class="st">hace ${dias(new Date(S.invTs).toISOString())} día${dias(new Date(S.invTs).toISOString())>1?'s':''}</b>`:' · hoy'):''}${bkTxt()}</div><div class="k">${kp('act',act.length,'ubicaciones activas','k0')}${kp('stk',act.length-rev,'con stock','k1')}${kp('rev',rev,'a revisar','k2')}${kp(null,P,'pedidos','k0')}${kp('old',old,'con más de '+S.cfg.dias+' días','k4')}${kp('hoy',hh,'auditadas hoy','k3')}</div>
+<div class="tb"><div class="sb"><input id="tq" class="sm" type="text" placeholder="Buscar pedido…" value="${E(Q)}" onkeydown="if(event.key=='Enter')tqs()"><button class="pri sm" onclick="tqs()">Buscar</button>${Q?'<button class="sm" onclick="tqc()">Quitar</button>':''}${GD?'':'<button class="sm" onclick="gstart()">Auditoría guiada</button>'}</div><div class="lg"><span><i style="background:var(--ok);border-color:var(--okb)"></i>con stock</span><span><i style="background:var(--rv);border-color:var(--rvb)"></i>a revisar (vacía)</span><span><i style="background:var(--au);border-color:var(--aub)"></i>auditada OK hoy</span><span><i style="background:var(--er);border-color:var(--erb)"></i>error hoy</span><span><i style="opacity:.45;background:repeating-linear-gradient(45deg,#fff 0 3px,var(--bd) 3px 4px)"></i>inactiva</span></div></div>${Q?qinfo():''}
+${GD?gbar():FIL?`<div class="warn">Mostrando solo: <b>${NM[FIL]}</b> (${L.filter(([id])=>vis(id)).length} ubicaciones). Pulsa una casilla para auditarla. <button class="pri sm" onclick="gstart()">Empezar auditoría guiada</button> <button class="sm" onclick="sf(null)">Quitar filtro</button></div>`:''}
+<div class="w"><div><div class="g" style="grid-template-columns:repeat(${nc},minmax(48px,1fr));min-width:${nc*50}px">${g}</div><h4>Otras zonas</h4><p class="mu">Las ubicaciones nuevas aparecen aquí: arrástralas al mapa. Si sueltas sobre una casilla ocupada, las de esa columna se desplazan hacia abajo (o hacia arriba si no hay hueco). Para quitar una del mapa, arrástrala aquí.</p><div class="z zn" ondragover="event.preventDefault()" ondrop="dz(event)">${zon||'<span class="mu">Vacío</span>'}</div></div>${SEL&&S.locs[SEL]?panel(SEL,ix):''}</div>`}
+function panel(id,ix){const rows=ix[id]||[],P=[...new Set(rows.map(r=>r.p))];
+return`<aside><h3>${id} <button class="x" onclick="sel(null)" aria-label="Cerrar">✕</button></h3><p class="mu">${rows.length} líneas, ${P.length} pedidos${S.locs[id].a?'':' (inactiva)'}</p>
+<div class="lst">${rows.slice(0,80).map(r=>`<div><b>${E(r.p)}</b> ${E(r.g)}<br><span class="mu">Ref ${E(r.r)} · ${E(r.q)} ud · ${dias(r.f)} días</span></div>`).join('')||'<i class="mu">Sin inventario</i>'}</div>
+<h4>Auditoría: pedidos encontrados</h4><select id="am">${['OK','MAL UBICADO','SIN UBICACION','ANULADO-SALDADO'].map(m=>`<option>${m}</option>`).join('')}</select>
+<textarea id="ap" rows="2" placeholder="Pedidos encontrados aquí (separados por espacio o coma)" oninput="hint()" style="width:100%">${E(P.length<=8?P.join(' '):'')}</textarea><div id="ah" class="ht"></div><input id="an" type="number" min="1" max="99" value="1" title="Nº de errores"><input id="ao" placeholder="Observaciones"><input id="ac" placeholder="Colaborador" value="${E(S.cfg.user)}">
+<button class="pri" onclick="aud('${id}')">Guardar auditoría</button><button class="dl" onclick="dl('${id}')">Eliminar ubicación</button></aside>`}
+const ps=()=>$('#ap').value.split(/[\s,;-]+/).filter(Boolean),ck=p=>{const w=[...new Set(S.inv.filter(r=>String(r.p)===p).map(r=>r.d))];return{w,s:!w.length?'no':w.includes(SEL)?'ok':'otra'}};
+function hint(){const el=$('#ah');if(!el)return;const a=ps().map(p=>[p,ck(p)]);
+el.innerHTML=a.map(([p,k])=>`<div>${k.s=='ok'?'✔ '+E(p)+': figura en esta ubicación':k.s=='otra'?'→ '+E(p)+': el sistema dice '+E(k.w.join(', '))+' (hay que corregirla)':'⚠ '+E(p)+': no está en el inventario'}</div>`).join('');
+if(a.length){const mal=a.filter(([,k])=>k.s=='otra').length,nov=a.filter(([,k])=>k.s=='no').length;$('#am').value=mal?'MAL UBICADO':nov?'SIN UBICACION':'OK';$('#an').value=Math.max(1,mal+nov)}}
+function aud(u){const m=$('#am').value,c=$('#ac').value.trim();if(!c)return alert('Indica el colaborador.');S.cfg.user=c;
+const dis=ps().map(p=>[p,ck(p)]).filter(([,k])=>k.s=='otra').map(([p,k])=>p+': sistema '+k.w.join('/')),o=[$('#ao').value.trim(),...dis].filter(Boolean).join(' | ');
+S.aud.push({f:hoy(),c,n:m==='OK'?0:Math.min(99,Math.max(1,Math.floor(+$('#an').value)||1)),m,u,p:ps().join('-'),o});
+if(m==='MAL UBICADO'||m==='SIN UBICACION')ps().forEach(p=>{const k=ck(p);if(k.s=='ok')return;if(!CR().some(x=>!x.ok&&x.p===p&&x.r===u))CR().push({f:hoy(),c,p,s:k.s=='no'?'No figura en el sistema':k.w.join('/'),r:u,ok:0})});
+save();let nx=null;
+if(FIL){const ix=idx(),ids=Object.entries(S.locs).filter(([k,l])=>l.r!=null&&mt(k,ix)).sort(([,a],[,b])=>a.r-b.r||a.c-b.c).map(([k])=>k),done=k=>S.aud.some(x=>x.u===k&&x.f===hoy()&&x.m!==COR),i=ids.indexOf(u);nx=[...ids.slice(i+1),...ids.slice(0,Math.max(i,0))].find(k=>!done(k))||null;SEL=nx}
+msg('Auditoría guardada en '+u+(nx?'. Siguiente: '+nx:''));R()}
+const fl=()=>{const q=Q.toLowerCase();let r=S.inv;if(q)r=r.filter(x=>[x.p,x.r,x.e,x.g,x.d].join(' ').toLowerCase().includes(q));if(OLD)r=r.filter(x=>dias(x.f)>S.cfg.dias);return r};
+const npg=rs=>Math.max(1,Math.ceil(rs.length/PS));
+function ctl(rs){const N=npg(rs);if(PG>N-1)PG=N-1;if(rs.length<=25)return'';const b=(l,k,off)=>`<button class="sm" ${off?'disabled':''} onclick="pg(${k})">${l}</button>`;
+return`<div class="pgn">${b('«',0,PG==0)}${b('‹ Anterior',PG-1,PG==0)}<span>Página <input type="number" min="1" max="${N}" value="${PG+1}" onchange="pg((Math.min(${N},Math.max(1,+this.value||1)))-1)"> de <b>${N}</b></span>${b('Siguiente ›',PG+1,PG>=N-1)}${b('»',N-1,PG>=N-1)}<label>Por página <select onchange="PS=+this.value;PG=0;bq()">${[25,50,100,200].map(v=>`<option${v==PS?' selected':''}>${v}</option>`).join('')}</select></label></div>`}
+function pg(k){PG=Math.max(0,k);bq();const e=$('#bres');if(e&&e.scrollIntoView)e.scrollIntoView({block:'start'})}
+const tabla=(rs,all)=>`<p class="mu">${rs.length} resultados${all?'':' · mostrando '+(rs.length?PG*PS+1:0)+'–'+Math.min(rs.length,PG*PS+PS)}</p>${all?'':ctl(rs)}<table><tr><th>Ubicación</th><th>Pedido</th><th>Ref.</th><th>Designación</th><th>Ctd</th><th>Entrega</th><th>Días</th></tr>${rs.slice(all?0:PG*PS,all?rs.length:PG*PS+PS).map(r=>`<tr><td><a href="#" onclick="goto('${E(r.d)}');return false">${E(r.d)}</a></td><td>${E(r.p)}</td><td>${E(r.r)}</td><td>${E(r.g)}</td><td>${E(r.q)}</td><td>${E(r.f)}</td><td>${dias(r.f)}</td></tr>`).join('')}</table>${all?'':ctl(rs)}`;
+const aq=arr=>{const q=Q.toLowerCase();return arr.filter(x=>[x.p,x.u,x.c,x.m,x.o,x.f,x.s,x.r].join(' ').toLowerCase().includes(q))};
+const loc=u=>`<a href="#" onclick="goto('${E(u)}');return false">${E(u)}</a>`;
+function ext(){if(!Q)return'';const a=aq(S.aud),c=aq(CR());
+return`<h3>En el informe de auditorías (${a.length})</h3>${a.length?`<table><tr><th>Fecha</th><th>Colaborador</th><th>Errores</th><th>Motivo</th><th>Ubicación</th><th>Pedido</th><th>Observaciones</th></tr>${a.map(x=>`<tr><td>${E(x.f)}</td><td>${E(x.c)}</td><td>${E(x.n)}</td><td>${E(x.m)}</td><td>${loc(x.u)}</td><td>${E(x.p)}</td><td>${E(x.o)}</td></tr>`).join('')}</table>`:'<p class="mu">Sin coincidencias.</p>'}
+<h3>En correcciones (${c.length})</h3>${c.length?`<table><tr><th>Pedido</th><th>El sistema dice</th><th>Encontrado en</th><th>Fecha</th><th>Estado</th></tr>${c.map(x=>`<tr><td>${E(x.p)}</td><td>${E(x.s)}</td><td>${loc(x.r)}</td><td>${E(x.f)}</td><td>${x.ok?'Corregida '+E(x.ok):'Pendiente'}</td></tr>`).join('')}</table>`:'<p class="mu">Sin coincidencias.</p>'}`}
+const res=all=>(all?`<div class="pt"><h2 style="margin:0">Ojo de Halcón · Resultados de búsqueda</h2><p>${Q?'Búsqueda: «'+E(Q)+'»':'Sin texto de búsqueda'}${OLD?' · solo pedidos con más de '+S.cfg.dias+' días':''} · ${new Date().toLocaleDateString('es-ES')}</p></div>`:'')+'<h3>En el inventario</h3>'+tabla(fl(),all)+ext();
+function pdf(){const J=window.jspdf;if(!J||!J.jsPDF)return false;const d=new J.jsPDF({orientation:'landscape',unit:'mm',format:'a4'});if(!d.autoTable)return false;
+const G=[23,128,63],st={fontSize:8,cellPadding:1.5},hs={fillColor:G,textColor:255},s=pt;
+d.setFontSize(15);d.setTextColor(...G);d.text('OJO DE HALCÓN · Resultados de búsqueda',14,14);
+d.setFontSize(9);d.setTextColor(60);d.text((Q?'Búsqueda: «'+pt(Q)+'»':'Sin texto de búsqueda')+(OLD?' · solo pedidos con más de '+S.cfg.dias+' días':'')+' · '+new Date().toLocaleDateString('es-ES'),14,20);
+let y=27;const sec=(tt,head,body)=>{if(y>185){d.addPage();y=14}d.setFontSize(11);d.setTextColor(...G);d.text(tt+' ('+body.length+')',14,y);
+if(body.length){d.autoTable({startY:y+2,head:[head],body,styles:st,headStyles:hs,margin:{left:14,right:14}});y=d.lastAutoTable.finalY+9}else{d.setFontSize(9);d.setTextColor(60);d.text('Sin coincidencias.',14,y+6);y+=14}};
+sec('En el inventario',['Ubicación','Pedido','Ref.','Designación','Ctd','Entrega','Días'],fl().map(r=>[r.d,r.p,r.r,r.g,r.q,r.f,dias(r.f)].map(s)));
+if(Q){sec('En el informe de auditorías',['Fecha','Colaborador','Errores','Motivo','Ubicación','Pedido','Observaciones'],aq(S.aud).map(x=>[x.f,x.c,x.n,x.m,x.u,x.p,x.o].map(s)));
+sec('En correcciones',['Pedido','El sistema dice','Encontrado en','Fecha','Estado'],aq(CR()).map(x=>[x.p,x.s,x.r,x.f,x.ok?'Corregida '+x.ok:'Pendiente'].map(s)))}
+savePdf(d,'busqueda_'+hoy()+'.pdf');return true}
+function pr(){try{if(pdf()){msg('PDF generado: busca «busqueda_'+hoy()+'.pdf» en tu carpeta de Descargas.');return}msg('No se pudo cargar la librería de PDF (¿sin conexión a internet?).')}catch(e){console.error(e);msg('No se pudo generar el PDF.')}}
+const inq=()=>{const q=Q.toLowerCase();return S.inv.filter(x=>[x.p,x.r,x.e,x.g,x.d].join(' ').toLowerCase().includes(q))};
+const lk=id=>S.locs[id]?loc(id):E(id)+' (no está en el mapa)';
+function qloc(){const s=new Set();inq().forEach(r=>s.add(r.d));aq(S.aud).forEach(x=>s.add(String(x.u).trim()));aq(CR()).forEach(x=>{s.add(x.r);String(x.s).split('/').forEach(k=>s.add(k))});return s}
+function qinfo(){const by={};inq().forEach(r=>(by[r.d]=by[r.d]||[]).push(r));const L=Object.entries(by),a=aq(S.aud).slice(-6).reverse(),pend=aq(CR()).filter(x=>!x.ok);
+const sis=L.length?L.slice(0,12).map(([d,rs])=>`${lk(d)} (${rs.length} línea${rs.length>1?'s':''})`).join(', ')+(L.length>12?` y ${L.length-12} más`:''):'no figura en el inventario';
+return`<div class="info"><b>«${E(Q)}»</b><div>El sistema lo ubica en: ${sis}</div>${a.length?`<div>Auditorías: ${a.map(x=>`encontrado en ${lk(x.u)} el ${E(x.f)} (${E(x.c)}, ${E(x.m)})`).join('; ')}</div>`:''}${pend.length?`<div>Pendiente de corregir en el sistema: ${pend.map(x=>`${E(x.p)}: ${E(x.s)} → ${lk(x.r)}`).join('; ')}</div>`:''}</div>`}
+const tqs=()=>{Q=$('#tq').value.trim();SEL=null;R()},tqc=()=>{Q='';SEL=null;R()};
+const bq=()=>{$('#bres').innerHTML=res()};
+function B(){return`<div class="bar"><input id="q" type="text" placeholder="Pedido, referencia, EAN, designación, ubicación o colaborador" value="${E(Q)}" oninput="Q=this.value;PG=0;bq()"><label><input type="checkbox" ${OLD?'checked':''} onchange="OLD=this.checked;PG=0;bq()"> Solo con más de ${S.cfg.dias} días</label><button onclick="pr()">Descargar PDF</button></div><div id="bres">${res()}</div>`}
+let CV='p';const CR=()=>S.cor||(S.cor=[]);
+const cl=()=>CR().map((x,i)=>[x,i]).filter(([x])=>CV=='t'||!x.ok).sort(([a],[b])=>(!!a.ok-!!b.ok)||String(b.f).localeCompare(String(a.f)));
+function C(){const A=CR(),rows=cl();
+return`<div class="bar"><b>${A.filter(x=>!x.ok).length} pendientes</b> de ${A.length}<label><input type="checkbox" ${CV=='t'?'checked':''} onchange="CV=this.checked?'t':'p';R()"> Ver también las corregidas</label><button onclick="expc()">Descargar PDF</button><button onclick="expcx()">Exportar a Excel</button></div>
+<p class="mu">Pedidos encontrados en una ubicación distinta a la que indica el sistema. Cuando los corrijas en el sistema, márcalos. Al cargar un inventario nuevo, los que ya figuren en su ubicación real se marcan solos.</p>
+${rows.length?`<table><tr><th>Pedido</th><th>El sistema dice</th><th>Encontrado en</th><th>Fecha</th><th>Colaborador</th><th>Corregida</th><th></th></tr>${rows.map(([x,i])=>`<tr><td><b>${E(x.p)}</b></td><td>${E(x.s)}</td><td><a href="#" onclick="goto('${E(x.r)}');return false">${E(x.r)}</a></td><td>${E(x.f)}</td><td>${E(x.c)}</td><td><input type="checkbox" ${x.ok?'checked':''} onchange="tgc(${i})"> ${x.ok?E(x.ok):''}</td><td><button class="rd" onclick="delc(${i})" aria-label="Quitar">✕</button></td></tr>`).join('')}</table>`:'<div class="empty">No hay correcciones pendientes.</div>'}`}
+const logCor=(x,quien)=>S.aud.push({f:hoy(),c:quien,n:0,m:COR,u:x.r,p:String(x.p),o:'Sistema actualizado: '+x.s+' → '+x.r,k:x.p+'|'+x.r+'|'+x.f});
+function tgc(i){const x=CR()[i],k=x.p+'|'+x.r+'|'+x.f;if(x.ok){x.ok=0;S.aud=S.aud.filter(a=>a.k!==k);msg('Corrección reabierta y quitada del informe.')}else{x.ok=hoy();logCor(x,S.cfg.user||'SIN INDICAR');msg(S.cfg.user?'Corrección anotada en el informe.':'Anotada en el informe como SIN INDICAR. Puedes ponerle tu nombre con ✎ en el Informe.')}save();R()}
+function delc(i){ask('¿Quitar esta corrección de la lista?','Solo se borra de esta lista; el Informe de auditorías no cambia.',()=>{CR().splice(i,1);save();R()},'Sí, quitar')}
+function rst(){ask('¿Reiniciar el inventario?','Se borra el inventario cargado y la app vuelve a la pantalla inicial para adjuntar un Excel nuevo. Se conservan las auditorías, las correcciones, las ubicaciones y los ajustes. Si quieres, haz antes una copia de seguridad en Ajustes.',()=>{S.inv=[];S.invDate=null;S.invTs=null;S.unk=[];Q='';FIL=null;SEL=null;save();msg('Inventario reiniciado. Adjunta un Excel para empezar.');go('tab')},'Sí, reiniciar')}
+function glist(){const ix=idx();return Object.entries(S.locs).filter(([k,l])=>l.r!=null&&mt(k,ix)).sort(([,a],[,b])=>a.r-b.r||a.c-b.c).map(([k])=>k)}
+const gdone=k=>S.aud.some(x=>x.u===k&&x.f===hoy()&&x.m!==COR);
+function gbar(){const ids=glist(),d=ids.filter(gdone).length,tot=ids.length,pc=tot?Math.round(d*100/tot):0;
+return`<div class="info"><b>Auditoría guiada · ${NM[FIL]}</b>: ${d} de ${tot} (${pc}%)<div class="pg"><i style="width:${pc}%"></i></div>${tot&&d===tot?'<b>Recorrido completo.</b> <button class="pri sm" onclick="go(\'inf\')">Ver informe</button>':'<button class="pri sm" onclick="gnext()">Saltar ▸</button>'} <button class="sm" onclick="gexit()">Salir</button></div>`}
+function gstart(){FIL=FIL||'rev';GD=true;Q='';const ids=glist();if(!ids.length){GD=false;return msg('No hay ubicaciones para auditar con este filtro.')}SEL=ids.find(k=>!gdone(k))||ids[0];R()}
+function gnext(){const ids=glist(),i=ids.indexOf(SEL),n=[...ids.slice(i+1),...ids.slice(0,Math.max(i,0))].find(k=>!gdone(k));SEL=n||SEL;R()}
+const gexit=()=>{GD=false;FIL=null;SEL=null;R()};
+function ed(i){const x=S.aud[i];if(!x)return;EDI=i;const L=['OK','MAL UBICADO','SIN UBICACION','ANULADO-SALDADO',COR];if(!L.includes(x.m))L.push(x.m);
+$('#ef').value=x.f||'';$('#ec').value=x.c||'';$('#en').value=x.n||0;$('#em').innerHTML=L.map(m=>`<option${m===x.m?' selected':''}>${E(m)}</option>`).join('');$('#eu').value=x.u||'';$('#ep').value=x.p||'';$('#eo').value=x.o||'';$('#edm').classList.add('on')}
+const edx=()=>{EDI=null;$('#edm').classList.remove('on')};
+function edok(){const x=S.aud[EDI];if(!x)return edx();const f=$('#ef').value,m=$('#em').value;if(!f)return alert('Indica la fecha.');
+let n=Math.min(99,Math.max(0,Math.floor(+$('#en').value)||0));if(m==='OK'||m===COR)n=0;else if(n<1)n=1;
+Object.assign(x,{f,c:$('#ec').value.trim(),n,m,u:$('#eu').value.trim().toUpperCase(),p:$('#ep').value.trim(),o:$('#eo').value.trim()});save();edx();msg('Registro actualizado');R()}
+function savePdf(d,n){const a=document.createElement('a');a.href=URL.createObjectURL(d.output('blob'));a.download=n;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),5000)}
+function expc(){try{const J=window.jspdf,no='No se pudo cargar la librería de PDF (¿sin conexión a internet?).';if(!J||!J.jsPDF)return msg(no);const d=new J.jsPDF({orientation:'landscape',unit:'mm',format:'a4'});if(!d.autoTable)return msg(no);
+const G=[23,128,63],rows=cl();d.setFontSize(15);d.setTextColor(...G);d.text('OJO DE HALCÓN · Correcciones '+(CV=='t'?'(pendientes y corregidas)':'pendientes'),14,14);
+d.setFontSize(9);d.setTextColor(60);d.text(rows.length+' pedidos · '+new Date().toLocaleDateString('es-ES'),14,20);
+d.autoTable({startY:25,head:[['Pedido','El sistema dice','Encontrado en','Fecha','Colaborador','Estado']],body:rows.map(([x])=>[x.p,x.s,x.r,x.f,x.c,x.ok?'Corregida '+x.ok:'Pendiente'].map(pt)),styles:{fontSize:9,cellPadding:2},headStyles:{fillColor:G,textColor:255},margin:{left:14,right:14}});
+const n='correcciones_'+hoy()+'.pdf';savePdf(d,n);msg('PDF generado: busca «'+n+'» en tu carpeta de Descargas.')}catch(e){console.error(e);msg('No se pudo generar el PDF.')}}
+function I(){const A=S.aud,sum=k=>{const m={};A.forEach(x=>{if(x.n)m[x[k]]=(m[x[k]]||0)+x.n});return Object.entries(m).sort((a,b)=>b[1]-a[1])};
+const box=(t,a)=>`<div class="card"><h4>${t}</h4>${a.map(([k,v])=>`<div class="kv"><span>${E(k)}</span><b>${v}</b></div>`).join('')||'<span class="mu">Sin errores</span>'}</div>`;
+return`<div class="bar"><b>${A.reduce((s,x)=>s+(+x.n||0),0)} errores</b> en ${A.length} registros <button onclick="exp()">Descargar PDF</button><button onclick="expx()">Exportar a Excel</button></div><div class="cards">${box('Por motivo',sum('m'))}${box('Por colaborador',sum('c'))}${box('Ubicaciones con más errores',sum('u').slice(0,8))}</div>
+<h3>Registro</h3><table><tr><th>Fecha</th><th>Colaborador</th><th>Errores</th><th>Motivo</th><th>Ubicación</th><th>Pedido</th><th>Observaciones</th><th></th></tr>${A.map((x,i)=>[x,i]).reverse().map(([x,i])=>`<tr><td>${E(x.f)}</td><td>${E(x.c)}</td><td>${x.n}</td><td>${E(x.m)}</td><td>${E(x.u)}</td><td>${E(x.p)}</td><td>${E(x.o)}</td><td style="white-space:nowrap"><button onclick="ed(${i})" aria-label="Editar" title="Editar">✎</button> <button class="rd" onclick="del(${i})" aria-label="Borrar" title="Borrar">✕</button></td></tr>`).join('')}</table>`}
+const del=i=>{const x=S.aud[i];if(!x)return;ask('¿Borrar este registro?',`${x.f} · ${x.u}${x.p?' · pedido '+x.p:''}. Esta acción no se puede deshacer.`,()=>{S.aud.splice(i,1);save();msg('Registro eliminado');R()},'Sí, borrar')};
+function xl(rows,hoja,pref){try{const ws=XLSX.utils.json_to_sheet(rows),wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,hoja);const n=pref+'_'+hoy()+'.xlsx';XLSX.writeFile(wb,n);msg('Excel generado: busca «'+n+'» en tu carpeta de Descargas.')}catch(e){console.error(e);msg('No se pudo generar el Excel.')}}
+const expx=()=>xl(S.aud.map(x=>({FECHA:x.f,'COLABORADOR REALIZA':x.c,'NUMERO ERRORES':x.n,MOTIVO:x.m,'UBICACION ENCONTRADO':x.u,PEDIDO:x.p,OBSERVACIONES:x.o})),'INFORME','informe');
+const expcx=()=>xl(cl().map(([x])=>({PEDIDO:x.p,'UBICACION SISTEMA':x.s,'UBICACION REAL':x.r,FECHA:x.f,COLABORADOR:x.c,ESTADO:x.ok?'CORREGIDA':'PENDIENTE','FECHA CORREGIDA':x.ok||''})),'CORRECCIONES','correcciones');
+const pt=v=>String(v==null?'':v).replace(/→/g,'->').replace(/[^\u0000-\u00FF]/g,'?');
+function newPdf(){const J=window.jspdf,no='No se pudo cargar la librería de PDF (¿sin conexión a internet?).';if(!J||!J.jsPDF){msg(no);return null}const d=new J.jsPDF({orientation:'landscape',unit:'mm',format:'a4'});if(!d.autoTable){msg(no);return null}return d}
+function exp(){try{const d=newPdf();if(!d)return;const A=S.aud,G=[23,128,63],tot=A.reduce((s,x)=>s+(+x.n||0),0),mot={};A.forEach(x=>{if(+x.n)mot[x.m]=(mot[x.m]||0)+(+x.n)});
+d.setFontSize(15);d.setTextColor(...G);d.text('OJO DE HALCÓN · Informe de auditorías',14,14);
+d.setFontSize(9);d.setTextColor(60);d.text(tot+' errores en '+A.length+' registros · '+new Date().toLocaleDateString('es-ES'),14,20);
+d.text('Por motivo: '+(Object.entries(mot).map(([k,v])=>k+' '+v).join(' · ')||'sin errores'),14,25);
+d.autoTable({startY:30,head:[['Fecha','Colaborador','Errores','Motivo','Ubicación','Pedido','Observaciones']],body:A.map(x=>[x.f,x.c,x.n,x.m,x.u,x.p,x.o].map(pt)).reverse(),styles:{fontSize:8,cellPadding:1.5,overflow:'linebreak',valign:'top'},columnStyles:{0:{cellWidth:22},1:{cellWidth:34},2:{cellWidth:16},3:{cellWidth:44},4:{cellWidth:22},5:{cellWidth:34},6:{cellWidth:'auto'}},headStyles:{fillColor:G,textColor:255},margin:{left:14,right:14}});
+const n='informe_'+hoy()+'.pdf';savePdf(d,n);msg('PDF generado: busca «'+n+'» en tu carpeta de Descargas.')}catch(e){console.error(e);msg('No se pudo generar el PDF.')}}
+function alist(){const ix=idx(),L=Object.entries(S.locs).filter(([id])=>id.toLowerCase().includes(LQ.toLowerCase())).sort(([a],[b])=>a.localeCompare(b));
+return`<p class="mu">${L.length} ubicaciones${L.length>400?' (se muestran 400)':''}</p><table><tr><th>Código</th><th>Posición en mapa</th><th>Activa</th><th>Líneas</th><th></th></tr>${L.slice(0,400).map(([id,l])=>`<tr><td>${E(id)}</td><td>${l.r==null?'zona sin posición':'fila '+(l.r+1)+', col. '+(l.c+1)}</td><td><input type="checkbox" ${l.a?'checked':''} onchange="tg('${E(id)}')"></td><td>${(ix[id]||[]).length}</td><td><button onclick="dl('${E(id)}')">Eliminar</button></td></tr>`).join('')}</table>`}
+const AL=()=>{$('#al').innerHTML=alist()};
+function tg(id){S.locs[id].a=S.locs[id].a?0:1;save()}
+let YES=null;
+function ask(h,tx,f,btn){$('#ovh').textContent=h;$('#ovt').textContent=tx;$('#ovy').textContent=btn||'Sí, eliminar';YES=f;$('#ov').classList.add('on')}
+function ovx(ok){$('#ov').classList.remove('on');const f=YES;YES=null;if(ok&&f)f()}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){ovx(false);edx()}});
+function dl(id){const n=(idx()[id]||[]).length;ask('¿Eliminar la ubicación '+id+'?',(n?`Tiene ${n} líneas de inventario, que dejarán de verse en el mapa. `:'')+'Esta acción no se puede deshacer. Si solo dejas de usarla, es mejor desmarcarla como activa.',()=>{delete S.locs[id];if(SEL===id)SEL=null;save();msg('Ubicación '+id+' eliminada');V==='aju'?AL():R()})}
+const G=()=>{if(!S.g||S.g.v!=2){const P=Object.values(S.locs).filter(l=>l.r!=null),a=k=>P.map(l=>l[k]);S.g=P.length?{v:2,r0:Math.min(...a('r'))-1,r1:Math.max(...a('r'))+1,c0:Math.min(...a('c'))-1,c1:Math.max(...a('c'))+1}:{v:2,r0:-1,r1:1,c0:-1,c1:1}}return S.g};
+function ex(k){const g=G();if(k=='t')g.r0--;if(k=='b')g.r1++;if(k=='l')g.c0--;if(k=='r')g.c1++;save();R()}
+let DR=null;
+function ds(e,id){DR=id;e.dataTransfer.setData('text/plain',id);document.body.classList.add('dg')}
+function dz(e){e.preventDefault();document.body.classList.remove('dg');const o=S.locs[DR];if(!o)return;o.r=null;o.c=null;save();R()}
+function dp(e,r,c){e.preventDefault();document.body.classList.remove('dg');const o=S.locs[DR];if(!o)return;const old={r:o.r,c:o.c};o.r=null;o.c=null;
+const at={};Object.entries(S.locs).forEach(([k,l])=>{if(l.r!=null&&l.c===c)at[l.r]=k});
+if(at[r]){const g=G();let d=r;while(d<=g.r1&&at[d])d++;
+if(d<=g.r1){for(let y=d;y>r;y--)S.locs[at[y-1]].r=y}
+else{let u=r;while(u>=g.r0&&at[u])u--;if(u<g.r0){o.r=old.r;o.c=old.c;return alert('No hay hueco en esa columna.')}for(let y=u+1;y<=r;y++)S.locs[at[y]].r=y-1}}
+o.r=r;o.c=c;save();R()}
+function mk(id){S.locs[id]={r:null,c:null,a:1}}
+function addL(){const ids=$('#nl').value.toUpperCase().split(/[\s,;]+/).filter(Boolean);if(!ids.length)return alert('Escribe al menos un código.');
+const ya=[];let n=0;ids.forEach(id=>{if(S.locs[id])ya.push(id);else{mk(id);n++}});save();
+msg(`Creadas ${n} en «Otras zonas»: arrástralas al mapa.`+(ya.length?` Ya existían: ${ya.join(', ')}`:''));go('tab')}
+function addUnk(){S.unk.forEach(mk);S.unk=[];save();msg('Añadidas en «Otras zonas».');R()}
+function A(){return`<div class="cards"><div class="card"><h4>Inventario base (Excel)</h4><p class="mu">${S.inv.length?S.inv.length+' líneas · cargado el '+E(S.invDate):'Aún no hay inventario'}</p><input type="file" accept=".xlsx,.xls,.csv" onchange="imp(this.files[0])"><p class="mu">Se lee la hoja con la columna «Dirección» (por ejemplo PEGAR_INVENTARIO). Si el Excel trae una hoja INFORME y el registro está vacío, también se importa.</p></div>
+<div class="card"><h4>Parámetros</h4><label>Días para considerar un pedido antiguo <input type="number" min="1" style="width:80px" value="${S.cfg.dias}" onchange="S.cfg.dias=+this.value||180;save()"></label></div>
+<div class="card"><h4>Tamaño del tablero</h4><p class="mu">Añade 1 fila o columna libre por cada clic. Tamaño actual: ${G().r1-G().r0+1} filas × ${G().c1-G().c0+1} columnas.</p><div class="g2"><button onclick="ex('t')">Arriba</button><button onclick="ex('b')">Abajo</button><button onclick="ex('l')">Izquierda</button><button onclick="ex('r')">Derecha</button></div></div>
+<div class="card"><h4>Copia de seguridad</h4><p class="mu">Los datos se guardan en este navegador. Para usarlos en otro ordenador, exporta aquí e importa allí.</p><button onclick="bk()">Exportar copia</button> <input type="file" accept=".json" onchange="rs(this.files[0])"></div></div>
+<h3 class="acc" role="button" tabindex="0" aria-expanded="${UBO}" onclick="UBO=!UBO;R()" onkeydown="if(event.key=='Enter'){UBO=!UBO;R()}"><span>${UBO?'▾':'▸'}</span> Ubicaciones <span class="mu">(${Object.keys(S.locs).length}) · ${UBO?'pulsa para plegar':'pulsa para desplegar'}</span></h3>${S.unk&&S.unk.length?`<div class="warn">${S.unk.length} ubicaciones del inventario no están en el mapa (${E(S.unk.slice(0,8).join(', '))}…) <button onclick="addUnk()">Añadirlas como zonas</button></div>`:''}
+${UBO?`<p class="mu">Escribe uno o varios códigos: se crean en «Otras zonas» del Tablero y desde allí los arrastras a su sitio en el mapa.</p><div class="bar"><input type="text" placeholder="Buscar ubicación" value="${E(LQ)}" oninput="LQ=this.value;AL()"><input id="nl" placeholder="Códigos nuevos separados por espacio (ej. A1873 A1881)" size="46"><button class="pri" onclick="addL()">Crear ubicaciones</button></div><div id="al">${alist()}</div>`:''}`}
+function bk(){S.cfg.bk=Date.now();save();const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));a.download='halcon_copia_'+hoy()+'.json';a.click();R();msg('Copia descargada: busca «halcon_copia_'+hoy()+'.json» en tu carpeta de Descargas.')}
+async function rs(f){if(!f)return;try{const d=JSON.parse(await f.text());if(!d.locs)throw 0;S=d;save();msg('Copia restaurada');R()}catch(e){alert('Archivo de copia no válido.')}}
+const iso=v=>v instanceof Date?new Date(v.getTime()+432e5).toISOString().slice(0,10):String(v||'').slice(0,10);
+async function imp(f){if(!f)return;try{const wb=XLSX.read(await f.arrayBuffer(),{cellDates:true});
+const sh=wb.SheetNames.find(n=>/inventario/i.test(n))||wb.SheetNames[0],R0=XLSX.utils.sheet_to_json(wb.Sheets[sh],{header:1,defval:''}),hi=R0.findIndex(r=>r.some(c=>/^direcci/i.test(String(c).trim())));
+if(hi<0)return alert('No encuentro la columna «Dirección» en el archivo.');
+const H=R0[hi].map(c=>String(c).trim().toLowerCase()),col=re=>H.findIndex(h=>re.test(h)),c={d:col(/^direcci/),p:col(/^n.\s*ped/),r:col(/^ref/),e:col(/ean/),g:col(/designa/),q:col(/ctd/),f:col(/fecha/)};
+const seen=new Set();let dup=0;const inv=[];
+R0.slice(hi+1).forEach(x=>{const d=String(x[c.d]).trim().toUpperCase();if(!d)return;const o={d,p:x[c.p],r:x[c.r],e:x[c.e],g:String(x[c.g]).trim(),q:x[c.q],f:iso(x[c.f])},k=JSON.stringify(o);if(seen.has(k)){dup++;return}seen.add(k);inv.push(o)});
+S.inv=inv;S.invDate=new Date().toLocaleString('es-ES');S.invTs=Date.now();S.unk=[...new Set(inv.map(r=>r.d))].filter(d=>!S.locs[d]).sort();
+let extra='';const wi=wb.SheetNames.find(n=>/^informe$/i.test(n));
+if(wi&&!S.aud.length){const rows=XLSX.utils.sheet_to_json(wb.Sheets[wi],{defval:''});rows.forEach(o=>{const z={};Object.entries(o).forEach(([k,v])=>z[k.trim().toUpperCase()]=v);if(!z['MOTIVO'])return;S.aud.push({f:iso(z['FECHA']),c:z['COLABORADOR REALIZA'],n:+z['NUMERO ERRORES']||0,m:z['MOTIVO'],u:String(z['UBICACION ENCONTRADO']).trim(),p:String(z['PEDIDO']),o:z['OBSERVACIONES']})});extra=` y ${S.aud.length} registros de informe`}
+let auto=0;CR().forEach(x=>{if(!x.ok&&inv.some(r=>String(r.p)===String(x.p)&&r.d===x.r)){x.ok=hoy();logCor(x,'AUTOMATICO (carga de inventario)');auto++}});
+save();msg(`Cargadas ${inv.length} líneas${extra}.${auto?' Correcciones ya hechas en el sistema: '+auto+'.':''} Duplicados eliminados: ${dup}. Ubicaciones fuera del mapa: ${S.unk.length}.`);R()}catch(e){alert('No se pudo leer el archivo: '+e.message)}}
+R();
+</script></body></html>
